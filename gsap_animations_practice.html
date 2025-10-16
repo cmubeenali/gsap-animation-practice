@@ -12,7 +12,7 @@
             height: 200vh;
             /* long scroll to see pin effect */
             display: flex;
-            justify-content: center;
+            justify-content: start;
             align-items: top;
         }
 
@@ -23,27 +23,33 @@
             display: flex;
             justify-content: top;
             align-items: top;
+            width: 100%;
         }
 
         .text-caption-wrapper {
-            width: 200px;
+            width: 0px;
+            /* initial width */
             height: 50px;
             background-color: white;
             overflow: hidden;
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
+            /* correct flex */
             align-items: center;
-            transform: translateX(-100%);
-            border-radius: 15px 15px 0px 0px;
+            border-radius: 15px 15px 0 0;
+            margin-left: 20px;
+            margin-top: 20px;
+            max-width: 200px;
         }
 
         .text-caption-wrapper span {
             display: inline-block;
             color: #FCA02A;
-            transform: translateX(-100%);
+            transform: translateX(0%);
             font-size: 18px;
             font-family: "Roboto", Sans-serif;
             font-weight: bold;
+            transform: translateX(-100%); /* ✨ start off-screen (hidden) */
         }
     </style>
 </head>
@@ -66,26 +72,30 @@
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: ".scroll-section",
-                start: "top top",     // pin starts when section hits top
-                end: "bottom top",        // scroll distance to control animation
-                scrub: true,          // scroll controls the animation
-                pin: true,            // keeps section fixed during scroll
+                start: "top top",
+                end: "bottom top",
+                scrub: true,
+                pin: true,
                 anticipatePin: 1
             }
         });
 
-        // ✨ Both animations start together
-        tl.to(".text-caption-wrapper span", {
-            x: 0,
-            duration: 1,
-            ease: "power2.out"
-        }, 0) // 👈 starts at same time as next one
-        .to(".text-caption-wrapper", {
-            x: 0,
+        // ✨ Existing text animations
+        tl.to(".text-caption-wrapper", {
+            x: 10,
             duration: 1.5,
             ease: "power2.out"
-        }, 0); // 👈 same start time
-
+        }, 0)
+        // ✨ New: increase width as scroll progresses
+        .to(".text-caption-wrapper", {
+            width: "100%",
+            duration: 1.5,
+            ease: "power2.inOut"
+        }, 0).to(".text-caption-wrapper span", {
+            x: "75%",
+            duration: 0.7,
+            ease: "power3.out",
+        }, 0.4)
     </script>
 </body>
 

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GSAP Scroll Width Animation</title>
+  <style>
+    body {
+      height: 200vh; /* enough space to scroll */
+      background: #f3f3f3;
+      margin: 0;
+    }
+
+    .scroll-section {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      /* justify-content: center; */
+    }
+
+    .bar {
+      width: 0;
+      height: 10px;
+      background: #3b82f6;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <section class="scroll-section">
+    <div class="bar"></div>
+  </section>
+
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.to(".bar", {
+      width: "80%",            // final width
+      scrollTrigger: {
+        trigger: ".scroll-section",
+        start: "top top",   // when section hits middle of viewport
+        end: "bottom top",  // animation ends when bottom hits middle
+        scrub: true,           // link animation to scroll position
+        pin:true
+      }
+    });
+  </script>
+</body>
+</html>
