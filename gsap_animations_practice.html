@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSAP Scroll-controlled Text + Container Reveal</title>
+    <style>
+        body {
+            margin: 0;
+            background: #7c6bff;
+            height: 200vh;
+            /* long scroll to see pin effect */
+            display: flex;
+            justify-content: center;
+            align-items: top;
+        }
+
+        .scroll-section {
+            position: relative;
+            height: 200vh;
+            /* section that will be pinned */
+            display: flex;
+            justify-content: top;
+            align-items: top;
+        }
+
+        .text-caption-wrapper {
+            width: 200px;
+            height: 50px;
+            background-color: white;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: translateX(-100%);
+            border-radius: 15px 15px 0px 0px;
+        }
+
+        .text-caption-wrapper span {
+            display: inline-block;
+            color: #FCA02A;
+            transform: translateX(-100%);
+            font-size: 18px;
+            font-family: "Roboto", Sans-serif;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="scroll-section">
+        <div class="text-caption-wrapper">
+            <span>Go Digital,</span>
+        </div>
+    </div>
+
+    <!-- GSAP Core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <!-- GSAP ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: ".scroll-section",
+                start: "top top",     // pin starts when section hits top
+                end: "bottom top",        // scroll distance to control animation
+                scrub: true,          // scroll controls the animation
+                pin: true,            // keeps section fixed during scroll
+                anticipatePin: 1
+            }
+        });
+
+        // ✨ Both animations start together
+        tl.to(".text-caption-wrapper span", {
+            x: 0,
+            duration: 1,
+            ease: "power2.out"
+        }, 0) // 👈 starts at same time as next one
+        .to(".text-caption-wrapper", {
+            x: 0,
+            duration: 1.5,
+            ease: "power2.out"
+        }, 0); // 👈 same start time
+
+    </script>
+</body>
+
+</html>

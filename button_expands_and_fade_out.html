@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSAP Scroll-controlled Text + Container Reveal</title>
+    <style>
+        body {
+            margin: 0;
+            background: #7c6bff;
+            height: 100vh;
+            /* long scroll to see pin effect */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .scroll-section {
+            position: relative;
+            height: 100vh;
+            /* section that will be pinned */
+            display: flex;
+            justify-content: top;
+            align-items: top;
+        }
+
+        .text-caption-wrapper {
+            width: 200px;
+            height: 50px;
+            background-color: white;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: translateX(-100%);
+            border-radius: 15px 15px 0px 0px;
+        }
+
+        .text-caption-wrapper span {
+            display: inline-block;
+            color: #FCA02A;
+            transform: translateX(-100%);
+            font-size: 18px;
+            font-family: "Roboto", Sans-serif;
+            font-weight: bold;
+        }
+
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            transition: background-color 0.5s ease, transform 0.5s ease;
+        }
+
+        .box:hover {
+            background-color: blue;
+            transform: scale(1.2);
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: translateX(0);
+            }            
+
+            25% {
+                transform: translateX(-50px);
+            }            
+
+            /* 50% {
+                transform: translateY(0);
+            } */
+
+            75% {
+                transform: translateX(50px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .ball {
+            width: 50px;
+            height: 50px;
+            background-color: orange;
+            border-radius: 50%;
+            animation: bounce 1s infinite ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+
+    </div>
+
+    <div class="ball">
+
+    </div>
+    <script>
+
+    </script>
+</body>
+
+</html>
