@@ -9,18 +9,18 @@
         body {
             margin: 0;
             background: #7c6bff;
-            height: 200vh;
+            height: auto;
             /* long scroll to see pin effect */
             display: flex;
             justify-content: start;
             align-items: top;
+            flex-direction: column;
         }
 
         .scroll-section {
             position: relative;
             height: 200vh;
             /* section that will be pinned */
-            display: flex;
             justify-content: top;
             align-items: top;
             width: 100%;
@@ -78,6 +78,10 @@
         </div>
     </div>
 
+    <div class="section-2" style="height: 100vh; background-color: red; z-index: 3;">
+        <h2>HELLO WORLD</h2>
+    </div>
+
     <!-- GSAP Core -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <!-- GSAP ScrollTrigger -->
@@ -85,6 +89,9 @@
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
+
+        const pinnedHeight = document.querySelector(".scroll-section").offsetHeight;
+        console.log(pinnedHeight);
 
         const tl = gsap.timeline({
             scrollTrigger: {
@@ -106,7 +113,8 @@
                 end: "100% top", // 👈 fade out within first 25% scroll distance
                 scrub: true,
                 pin: true,
-                anticipatePin: 1
+                anticipatePin: 1,
+                pinSpacing: true
             }
         });
 
@@ -115,24 +123,38 @@
             x: 10,
             duration: 1.5,
             ease: "power2.out"
-        }, 0)
-            // ✨ New: increase width as scroll progresses
-            .to(".text-caption-wrapper", {
-                width: "100%",
-                duration: 1.5,
-                ease: "power2.inOut"
-            }, 0).to(".text-caption-wrapper span", {
-                x: (i, target) => {
-                    const wrapper = target.parentElement;
-                    const wrapperWidth = wrapper.offsetWidth;
-                    const textWidth = target.offsetWidth;
+        }, 0);
+        // ✨ New: increase width as scroll progresses
+        tl.to(".text-caption-wrapper", {
+            width: "100%",
+            duration: 1.5,
+            ease: "power2.inOut"
+        }, 0);
+        tl.to(".text-caption-wrapper span", {
+            x: (i, target) => {
+                const wrapper = target.parentElement;
+                const wrapperWidth = wrapper.offsetWidth;
+                const textWidth = target.offsetWidth;
 
-                    // Move it so it slides in nicely from outside
-                    return (wrapperWidth / 2) - (textWidth / 2); // subtract small padding
-                },
-                duration: 0.7,
-                ease: "power3.out",
-            }, 0.4)
+                // Move it so it slides in nicely from outside
+                return (wrapperWidth / 2) - (textWidth / 2); // subtract small padding
+            },
+            duration: 0.7,
+            ease: "power3.out",
+        }, 0.4);
+        const section2Height = document.querySelector(".section-2").offsetHeight;
+        console.log(section2Height);
+        // 2️⃣ Trigger for section-2 overlapping
+        tl.to(".section-2", {
+            y: 0,  // start from y offset if needed
+            scrollTrigger: {
+                trigger: ".scroll-section",
+                start: "bottom top", // after first section finished
+                end: "+=" + section2Height, // scroll distance for overlap
+                scrub: true,
+                pin: false // no pin here
+            }
+        });
     </script>
 </body>
 
