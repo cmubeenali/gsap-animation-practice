@@ -8,47 +8,23 @@
     <style>
         body {
             margin: 0;
-            /* Total scrollable height will be: 400 (S1) + 300 (S2) + 500 (Spacer) = 1200px */
-        }
-
-        #section1 {
-            height: 400px;
-            background-color: lightblue;
+            background: #7c6bff;
+            height: 1200px;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2em;
-            position: relative;
-            /* Essential for stacking context if needed */
-            z-index: 1;
-            /* S1 should be underneath S2 when overlapped */
-        }
-
-        #section2 {
-            height: 300px;
-            background-color: coral;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2em;
-            /* Ensure S2 sits above S1 when overlapped */
-            z-index: 2;
-            position: relative;
-        }
-
-        #wrapper {
-            /* Required to contain the sections and manage the total pinned height */
-            position: relative;
+            justify-content: start;
+            align-items: top;
+            flex-direction: column;
         }
     </style>
 </head>
 
 <body>
-    <!-- <div id="wrapper"> -->
-        <section id="section1">Section 1 (400px)</section>
-        <section id="section2">Section 2 (300px, will overlap)</section>
-    <!-- </div> -->
-    <div style="height: 500px; background-color: #eee;">Spacer (500px)</div>
+    <div class="section-1" style="width: 100%; background-color: orange; height: 400px; z-index: 1;">
+
+    </div>
+    <div class="section-2" style="width: 100%; background-color: rgb(230, 0, 255); height: 300px; z-index: 2;">
+
+    </div>
     <!-- GSAP Core -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <!-- GSAP ScrollTrigger -->
@@ -56,22 +32,20 @@
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
-
-        // --- 1. ScrollTrigger for Section 2 (The Overlapper) ---
         ScrollTrigger.create({
-            trigger: "#section2",
+            trigger: ".section-2",
             pin: true,
             pinSpacing: false, // Important: Prevents ScrollTrigger from adding extra margin/padding for the pin
-            // Start the pinning when the scroll position reaches the height of section 1 (400px)
+            // Start immediately at the top
             start: "top 400",
-            // End the pinning after section 2's height (300px) has been scrolled through
-            end: "+=400",
+            // End when the total duration of the first section's height (400px) 
+            // PLUS the duration of the second section's pin (300px) is reached.
+            end: "+=300", // 400px (S1 height) + 300px (S2 pin duration) = 700px total scroll
             markers: true // Helpful for debugging
         });
 
-        // --- 2. ScrollTrigger for Section 1 (The Pinned Base) ---
         ScrollTrigger.create({
-            trigger: "#section1",
+            trigger: ".section-1",
             pin: true,
             pinSpacing: false, // Important: Prevents ScrollTrigger from adding extra margin/padding for the pin
             // Start immediately at the top
