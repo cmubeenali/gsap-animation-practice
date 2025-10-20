@@ -9,7 +9,7 @@
         body {
             margin: 0;
             background: #7c6bff;
-            height: 500vh;
+            height: 1500px;
             /* long scroll to see pin effect */
             display: flex;
             justify-content: start;
@@ -55,7 +55,7 @@
 
         .text-caption-wrapper span {
             display: inline-block;
-            color: #FCA02A;
+            color: #ffffff;
             transform: translateX(0%);
             font-size: 18px;
             font-family: "Roboto", Sans-serif;
@@ -79,7 +79,7 @@
         </div>
     </div>
 
-    <div class="section-2" style="height: 300px; background-color: red; z-index: 3;">
+    <div class="section-2" style="height: 300px; background-color: red; z-index: 3; opacity: 0.2;">
         <h2>HELLO WORLD</h2>
     </div>
 
@@ -94,42 +94,60 @@
         const pinnedHeight = document.querySelector(".scroll-section").offsetHeight;
         console.log(pinnedHeight);
 
-        const tl = gsap.timeline({
+        const section2Height = document.querySelector(".section-2").offsetHeight;
+        console.log(section2Height);
+
+
+        gsap.to('.scroll-section', {
             scrollTrigger: {
                 trigger: ".scroll-section",
                 start: "top top",
-                end: "bottom top",
+                end: (pinnedHeight + section2Height).toString(),
                 scrub: true,
                 pin: true,
-                anticipatePin: 1
+                anticipatePin: 1,
+                pinSpacing: false,
             }
         });
+
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: ".scroll-section",
+                start: "0",
+                end: "250", // 👈 fade out within first 25% scroll distance
+                scrub: true,
+                pin: false,
+                anticipatePin: 1,
+                pinSpacing: false
+            }
+        })
 
         tl.to(".logo", {
             opacity: 0,
             ease: "power4.out",
-            scrollTrigger: {
-                trigger: ".logo-section",
-                start: "top top",
-                end: "100% top", // 👈 fade out within first 25% scroll distance
-                scrub: true,
-                pin: true,
-                anticipatePin: 1,
-                pinSpacing: true
-            }
+            duration: 0.2
+            // scrollTrigger: {
+            //     trigger: ".logo-section",
+            //     start: "top top",
+            //     end: "100% top", // 👈 fade out within first 25% scroll distance
+            //     scrub: true,
+            //     pin: true,
+            //     anticipatePin: 1,
+            //     pinSpacing: false
+            // }
         });
 
         // ✨ Existing text animations
         tl.to(".text-caption-wrapper", {
             x: 10,
-            duration: 1.5,
-            ease: "power2.out"
+            duration: 0.5,
+            ease: "power2.out",
         }, 0);
         // ✨ New: increase width as scroll progresses
         tl.to(".text-caption-wrapper", {
             width: "100%",
-            duration: 1.5,
-            ease: "power2.inOut"
+            duration: 0.5,
+            ease: "power2.inOut",
         }, 0);
         tl.to(".text-caption-wrapper span", {
             x: (i, target) => {
@@ -140,19 +158,22 @@
                 // Move it so it slides in nicely from outside
                 return (wrapperWidth / 2) - (textWidth / 2); // subtract small padding
             },
-            duration: 0.7,
-            ease: "power3.out",
-        }, 0.4);
-        const section2Height = document.querySelector(".section-2").offsetHeight;
-        console.log(section2Height);
+            ease: "power3.out",            
+            duration: 0.1
+        }, 0.2);
+        tl.to(".text-caption-wrapper span", {
+            color:'#FCA02A',
+            ease: "power4.out",            
+            duration: 0.1
+        }, 0);
         // 2️⃣ Trigger for section-2 overlapping
         gsap.to(".section-2", {
-            y: 0,  // start from y offset if needed
             scrollTrigger: {
                 trigger: ".section-2",
-                start: "+=0%", // after first section finished
-                end: "+="+pinnedHeight, // scroll distance for overlap
+                start: "top " + pinnedHeight, // after first section finished
+                end: section2Height.toString(), // scroll distance for overlap
                 scrub: true,
+                pinSpacing: false,
                 pin: true // no pin here
             }
         });
