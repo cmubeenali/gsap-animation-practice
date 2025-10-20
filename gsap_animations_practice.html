@@ -9,7 +9,7 @@
         body {
             margin: 0;
             background: #7c6bff;
-            height: auto;
+            height: 500vh;
             /* long scroll to see pin effect */
             display: flex;
             justify-content: start;
@@ -19,13 +19,14 @@
 
         .scroll-section {
             position: relative;
-            height: 200vh;
+            height: 400px;
             /* section that will be pinned */
             justify-content: top;
             align-items: top;
             width: 100%;
             display: grid;
             grid-template-areas: "stacked-area";
+            background-color: #FCA02A;
         }
 
         .stacked-item {
@@ -78,7 +79,7 @@
         </div>
     </div>
 
-    <div class="section-2" style="height: 100vh; background-color: red; z-index: 3;">
+    <div class="section-2" style="height: 300px; background-color: red; z-index: 3;">
         <h2>HELLO WORLD</h2>
     </div>
 
@@ -145,14 +146,14 @@
         const section2Height = document.querySelector(".section-2").offsetHeight;
         console.log(section2Height);
         // 2️⃣ Trigger for section-2 overlapping
-        tl.to(".section-2", {
+        gsap.to(".section-2", {
             y: 0,  // start from y offset if needed
             scrollTrigger: {
-                trigger: ".scroll-section",
-                start: "bottom top", // after first section finished
-                end: "+=" + section2Height, // scroll distance for overlap
+                trigger: ".section-2",
+                start: "+=0%", // after first section finished
+                end: "+="+pinnedHeight, // scroll distance for overlap
                 scrub: true,
-                pin: false // no pin here
+                pin: true // no pin here
             }
         });
     </script>
