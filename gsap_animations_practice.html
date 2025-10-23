@@ -9,7 +9,7 @@
         body {
             margin: 0;
             background: #7c6bff;
-            height: 1500px;
+            height: 3500px;
             /* long scroll to see pin effect */
             display: flex;
             justify-content: start;
@@ -79,8 +79,20 @@
         </div>
     </div>
 
-    <div class="section-2" style="height: 300px; background-color: red; z-index: 3; opacity: 0.2;">
-        <h2>HELLO WORLD</h2>
+    <div class="animation-section"
+        style="height: 768px; background-color: #efefef; display: flex; flex-direction: row;">
+        <div class="box-1"
+            style="width: 150px; height: 150px; background-color: black; display: flex; align-items: center; justify-content: center; color: white; margin-right: 50px;">
+            BOX 1
+        </div>
+        <div class="box-2"
+            style="width: 150px; height: 150px; background-color: black; display: flex; align-items: center; justify-content: center; color: white; margin-right: 50px;">
+            BOX 2
+        </div>
+        <div class="box-3"
+            style="width: 150px; height: 150px; background-color: black; display: flex; align-items: center; justify-content: center; color: white; margin-right: 50px;">
+            BOX 3
+        </div>
     </div>
 
     <!-- GSAP Core -->
@@ -88,13 +100,15 @@
     <!-- GSAP ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MotionPathPlugin.min.js"></script>
+
     <script>
-        gsap.registerPlugin(ScrollTrigger);
+        gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
         const pinnedHeight = document.querySelector(".scroll-section").offsetHeight;
         console.log(pinnedHeight);
 
-        const section2Height = document.querySelector(".section-2").offsetHeight;
+        const section2Height = document.querySelector(".animation-section").offsetHeight;
         console.log(section2Height);
 
 
@@ -158,24 +172,68 @@
                 // Move it so it slides in nicely from outside
                 return (wrapperWidth / 2) - (textWidth / 2); // subtract small padding
             },
-            ease: "power3.out",            
+            ease: "power3.out",
             duration: 0.1
         }, 0.2);
         tl.to(".text-caption-wrapper span", {
-            color:'#FCA02A',
-            ease: "power4.out",            
+            color: '#FCA02A',
+            ease: "power4.out",
             duration: 0.1
         }, 0);
-        // 2️⃣ Trigger for section-2 overlapping
-        gsap.to(".section-2", {
+        // 2️⃣ Trigger for animation-section overlapping
+        let boxes = gsap.utils.toArray('.box-1, .box-2, .box-3');
+        // Define path coordinates dynamically
+        // Note: x:0, y:0 is now the FINAL destination
+        const pathCoordinates = [
+            { x: 0, y: 0 },
+            { x: window.innerWidth / 2, y: window.innerHeight / 6 },
+            { x: window.innerWidth + 100, y: window.innerHeight }
+        ];
+        // 1. **CRITICAL FIX: Use gsap.set() to override Elementor's initial transforms.**
+        // This instantly moves all boxes to the desired final resting position (x:0, y:0)
+        // and removes Elementor's initial transform offset.
+        gsap.set(boxes, {
+            x: 0, // Reset Elementor's horizontal transform
+            y: 0, // Reset Elementor's vertical transform
+            // We use the first coordinate of the path for the instant placement.
+            // motionPath: {
+            //     path: pathCoordinates,
+            //     alignOrigin: [0.5, 0.5],
+            //     start: 0, // Set to the final destination point (progress 0)
+            // }
+        });
+        // 1. **Apply the animation to ALL boxes using stagger**
+        const slideInAnimation = gsap.from(boxes, { // <-- Use .from()
+            ease: "power2.out",
+            stagger: 0.15, // Stagger the start of each box
+            motionPath: {
+                path: pathCoordinates,
+                // alignOrigin will make the box center follow the path
+                alignOrigin: [0.5, 0.5],
+                start: 0, // Start at the end of the path (off-screen)
+                end: 1    // Animate TO the start of the path (on-screen, 0,0)
+            }
+        });
+        gsap.to(".animation-section", {
             scrollTrigger: {
-                trigger: ".section-2",
+                trigger: ".animation-section",
                 start: "top " + pinnedHeight, // after first section finished
                 end: section2Height.toString(), // scroll distance for overlap
                 scrub: true,
                 pinSpacing: false,
-                pin: true // no pin here
+                pin: true, // no pin here
             }
+        });
+
+        // 2. **ATTACH SCROLLTRIGGER**
+        ScrollTrigger.create({
+            trigger: ".animation-section",
+            start: "top top", 
+            end: "bottom top", 
+            scrub: true,
+            pin: true,
+            animation: slideInAnimation, 
+            // markers: true,
         });
     </script>
 </body>
