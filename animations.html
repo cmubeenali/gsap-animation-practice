@@ -1,7 +1,7 @@
 <script>
-    jQuery('body').ready(function () {
-        gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
-
+    window.addEventListener("load", () => {
+        gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);                
+        
         let isMobile = window.matchMedia("(max-width: 768px)").matches;
 
         let scrollSectionHeight = document.querySelector(".scroll-section").offsetHeight;
@@ -13,18 +13,12 @@
         let scrollSectionPinTopValue = 'top';
         if (isMobile) {
             scrollSectionPinTopValue = `top-=${(document.querySelector(".scroll-section").getBoundingClientRect().top)}`;
-            setTimeout(() => {
-                // initAnimation();
-                initAnimationMobile();
-                ScrollTrigger.refresh();
-            }, 0);
-        } else {
-            initAnimationWeb();
+            initAnimationMobile();
         }
 
         function initAnimationMobile() {
-            ScrollTrigger.config({ viewport: "mobile" }); // Essential for mobile stability
-
+            ScrollTrigger.config({ viewport: "mobile" }); // Essential for mobile stability            
+            let defaultPositionOfMarketingSection = document.querySelector(".marketing-section").getBoundingClientRect().top;
             let tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: ".scroll-section",
@@ -34,6 +28,29 @@
                     pin: true,
                     pinSpacing: false,
                     anticipatePin: 1,
+                    onLeave: () => {
+                        console.log('scroll trigger end for section .scroll-section');
+                    },
+                    onEnter: () => {
+                        console.log('marketing section pin start', ', marketing-section position : ', document.querySelector(".marketing-section").getBoundingClientRect().top);
+                        // ScrollTrigger.create({
+                        //     trigger: '.marketing-section',
+                        //     pin: true,
+                        //     pinSpacing: false,
+                        //     start: 'top ' + defaultPositionOfMarketingSection,
+                        //     end: '+=1084',
+                        //     anticipate: 1,
+                        //     onEnter: () => {
+                        //         console.log('marketing section pin start')
+                        //     },
+                        //     onLeave: () => {
+                        //         console.log('marketing section pin end')
+                        //     }
+                        // });
+                    },
+                    onUpdate: (e) => {
+                        // console.log('update', e);
+                    }
                 }
             });
 
@@ -47,13 +64,6 @@
             // NOTE: We don't use 'caption2Start' label anymore for simplicity.
             tl.to(".text-caption-wrapper-2", { x: 10, width: "100%", ease: "power2.out" }, 0.5);
             tl.to(".text-caption-wrapper-2 .text-caption-2", { x: 0, color: '#EC4D20', ease: "power3.out" }, 0.7);
-
-            // ScrollTrigger.create({
-            //     trigger:'.marketing-section',
-            //     pin:true,
-            //     pinSpacing:false,
-            //     start:'top 100%'
-            // });
 
             // Refresh listener (Keep this)
             ScrollTrigger.addEventListener("refresh", () => {
@@ -198,6 +208,6 @@
                 markers: false,
             });
         }
+        
     });
-
 </script>
