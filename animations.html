@@ -4,12 +4,6 @@
 
         let isMobile = window.matchMedia("(max-width: 768px)").matches;
 
-        let scrollSectionHeight = document.querySelector(".scroll-section").offsetHeight;
-        // console.log(scrollSectionHeight);
-        let marketingSectionHeight = document.querySelector(".marketing-section").offsetHeight;
-        // console.log(marketingSectionHeight);
-        // alert(scrollSectionHeight.toString() + ' ' + marketingSectionHeight.toString() + ' ' + isMobile.toString());
-
         let scrollSectionPinTopValue = 'top';
         if (isMobile) {
             scrollSectionPinTopValue = `top-=${(document.querySelector(".scroll-section").getBoundingClientRect().top)}`;
@@ -19,6 +13,12 @@
         }
 
         function initAnimationMobile() {
+            let scrollSectionHeight = document.querySelector(".scroll-section").offsetHeight;
+            // console.log(scrollSectionHeight);
+            let marketingSectionHeight = document.querySelector(".marketing-section").offsetHeight;
+            // console.log(marketingSectionHeight);
+            // alert(scrollSectionHeight.toString() + ' ' + marketingSectionHeight.toString() + ' ' + isMobile.toString());
+
             let boxes = gsap.utils.toArray('.marketing-box-1, .marketing-box-2, .marketing-box-3');
             gsap.set(boxes, {
                 x: window.innerWidth,
@@ -95,13 +95,16 @@
         }
 
         function initAnimationWeb() {
-            let totalPinEnd = document.querySelector('.scroll-section-main-grid').offsetHeight + marketingSectionHeight;
-            console.log(totalPinEnd);
-            const tl = gsap.timeline({
+            let scrollSectionHeight = document.querySelector(".scroll-section-web").offsetHeight;
+            // console.log(scrollSectionHeight);
+            let marketingSectionHeight = document.querySelector(".marketing-section-web").offsetHeight;
+            // console.log(marketingSectionHeight);
+            // alert(scrollSectionHeight.toString() + ' ' + marketingSectionHeight.toString() + ' ' + isMobile.toString());
+            gsap.to('.scroll-section-web', {
                 scrollTrigger: {
-                    trigger: ".scroll-section-main-grid",
-                    start: () => `${scrollSectionPinTopValue} top`,
-                    end: () => `${totalPinEnd}`,
+                    trigger: ".scroll-section-web",
+                    start: () => `top top`,
+                    end: () => `+=${scrollSectionHeight + marketingSectionHeight}`,
                     scrub: true,
                     pin: true,
                     pinSpacing: false,
@@ -109,27 +112,39 @@
                 }
             });
 
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: ".scroll-section-web",
+                    start: "0",
+                    end: "450",
+                    scrub: true,
+                    pin: false,
+                    pinSpacing: false,
+                    anticipatePin: 1
+                }
+            });
+
             // Fade out logo
-            tl.to(".logo", {
+            tl.to(".logo-web", {
                 opacity: 0,
                 ease: "power4.out",
-                duration: 0.1,
+                duration: 0.2,
             }, 0);
 
-            // // First wrapper animations
-            tl.to(".text-caption-wrapper", {
+            // First wrapper animations
+            tl.to(".text-caption-wrapper-web", {
                 x: 10,
                 duration: 0.5,
                 ease: "power2.out"
             }, 0);
 
-            tl.to(".text-caption-wrapper", {
+            tl.to(".text-caption-wrapper-web", {
                 width: "100%",
                 duration: 0.5,
                 ease: "power2.inOut"
             }, 0);
 
-            tl.to(".text-caption-wrapper .text-caption", {
+            tl.to(".text-caption-wrapper-web .text-caption-web", {
                 x: 0,
                 duration: 0.1,
                 color: '#EC4D20',
@@ -137,28 +152,27 @@
             }, 0.2);
 
             // 🕒 Now the second set starts AFTER all above are complete
-            tl.to(".text-caption-wrapper-2", {
+            tl.to(".text-caption-wrapper-2-web", {
                 x: 10,
                 duration: 0.5,
                 ease: "power2.out"
             }, '>');
 
-            tl.to(".text-caption-wrapper-2", {
+            tl.to(".text-caption-wrapper-2-web", {
                 width: "100%",
                 duration: 0.5,
                 ease: "power2.inOut"
             }, '<');
 
-            tl.to(".text-caption-wrapper-2 .text-caption-2", {
+            tl.to(".text-caption-wrapper-2-web .text-caption-2-web", {
                 x: 0,
                 color: '#EC4D20',
                 duration: 0.1,
                 ease: "power3.out",
             }, '<0.2');
 
-
             // 2️⃣ Trigger for animation-section overlapping
-            let boxes = gsap.utils.toArray('.marketing-box-1, .marketing-box-2, .marketing-box-3');
+            let boxes = gsap.utils.toArray('.marketing-box-1-web, .marketing-box-2-web, .marketing-box-3-web');
             // console.log(boxes);
             // Define path coordinates dynamically
             // Note: x:0, y:0 is now the FINAL destination
@@ -180,11 +194,6 @@
                 //     start: 0, // Set to the final destination point (progress 0)
                 // }
             });
-            // tl.to(".marketing-section", {
-            //     // y: '-' + defaultPositionOfMarketingSection.toString()
-            //     y: `-${document.querySelector('.scroll-section-main-grid').offsetHeight + 20}`,
-            //     duration: 2
-            // }, '>');
             // 1. **Apply the animation to ALL boxes using stagger**
             const slideInAnimation = gsap.from(boxes, { // <-- Use .from()
                 ease: "power2.out",
@@ -197,28 +206,36 @@
                     end: 1    // Animate TO the start of the path (on-screen, 0,0)
                 }
             });
-            // tl.st.animation = slideInAnimation;
-            // gsap.to(".marketing-section", {
-            //     scrollTrigger: {
-            //         trigger: ".marketing-section",
-            //         start: `top ` + scrollSectionHeight, // after first section finished
-            //         end: marketingSectionHeight.toString(), // scroll distance for overlap
-            //         scrub: true,
-            //         pinSpacing: false,
-            //         pin: true // no pin here
-            //     }
-            // });
+            gsap.to('.marketing-section-web', {
+                scrollTrigger: {
+                    trigger: ".marketing-section-web",
+                    start: `0`,
+                    end: `${document.querySelector('.marketing-section-web').getBoundingClientRect().top}`, // scroll distance for overlap
+                    scrub: true,
+                    pinSpacing: false,
+                    pin: true // no pin here
+                }
+            });
             // 2. **ATTACH SCROLLTRIGGER**
-            let st= ScrollTrigger.create({
-                trigger: ".marketing-section",
-                start: "top "+document.querySelector('.marketing-section').getBoundingClientRect().top,
-                end: "+=600",
+            ScrollTrigger.create({
+                trigger: ".marketing-section-web",
+                start: "top top",
+                end: `+=${marketingSectionHeight+20}`,
                 scrub: true,
                 pin: true,
                 animation: slideInAnimation,
                 markers: false,
             });
-            console.log(st);
+            gsap.to('.remaining-section', {
+                scrollTrigger: {
+                    trigger: ".remaining-section",
+                    start: `0`,
+                    end: `${document.querySelector('.remaining-section').getBoundingClientRect().top-20}`, // scroll distance for overlap
+                    scrub: false,
+                    pinSpacing: false,
+                    pin: true // no pin here
+                }
+            });            
         }
 
     });
