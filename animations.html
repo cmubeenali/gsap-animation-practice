@@ -99,7 +99,7 @@
             console.log(totalPinEnd);
             const tl = gsap.timeline({
                 scrollTrigger: {
-                    trigger: ".scroll-section",
+                    trigger: ".scroll-section-main-grid",
                     start: () => `${scrollSectionPinTopValue} top`,
                     end: () => `${totalPinEnd}`,
                     scrub: true,
@@ -109,129 +109,116 @@
                 }
             });
 
-            // const tl = gsap.timeline({
-            //     scrollTrigger: {
-            //         trigger: ".scroll-section-main-grid",
-            //         start: "0",
-            //         end: "450",
-            //         scrub: true,
-            //         pin: false,
-            //         pinSpacing: false,
-            //         anticipatePin: 1
-            //     }
-            // });
-
-            // // Fade out logo
-            // tl.to(".logo", {
-            //     opacity: 0,
-            //     ease: "power4.out",
-            //     duration: 0.2,
-            //     // scrollTrigger: {
-            //     //     trigger: ".logo-section",
-            //     //     start: "top top",
-            //     //     end: "100% top",
-            //     //     scrub: true,
-            //     //     pin: true,
-            //     //     pinSpacing: false,
-            //     //     anticipatePin: 0
-            //     // }
-            // }, 0);
+            // Fade out logo
+            tl.to(".logo", {
+                opacity: 0,
+                ease: "power4.out",
+                duration: 0.1,
+            }, 0);
 
             // // First wrapper animations
-            // tl.to(".text-caption-wrapper", {
-            //     x: 10,
-            //     duration: 0.5,
-            //     ease: "power2.out"
-            // }, 0);
+            tl.to(".text-caption-wrapper", {
+                x: 10,
+                duration: 0.5,
+                ease: "power2.out"
+            }, 0);
 
-            // tl.to(".text-caption-wrapper", {
-            //     width: "100%",
-            //     duration: 0.5,
-            //     ease: "power2.inOut"
-            // }, 0);
+            tl.to(".text-caption-wrapper", {
+                width: "100%",
+                duration: 0.5,
+                ease: "power2.inOut"
+            }, 0);
 
-            // tl.to(".text-caption-wrapper .text-caption", {
-            //     x: 0,
-            //     duration: 0.1,
-            //     color: '#EC4D20',
-            //     ease: "power3.out",
-            // }, 0.2);
+            tl.to(".text-caption-wrapper .text-caption", {
+                x: 0,
+                duration: 0.1,
+                color: '#EC4D20',
+                ease: "power3.out",
+            }, 0.2);
 
-            // // 🕒 Now the second set starts AFTER all above are complete
-            // tl.to(".text-caption-wrapper-2", {
-            //     x: 10,
-            //     duration: 0.5,
-            //     ease: "power2.out"
+            // 🕒 Now the second set starts AFTER all above are complete
+            tl.to(".text-caption-wrapper-2", {
+                x: 10,
+                duration: 0.5,
+                ease: "power2.out"
+            }, '>');
+
+            tl.to(".text-caption-wrapper-2", {
+                width: "100%",
+                duration: 0.5,
+                ease: "power2.inOut"
+            }, '<');
+
+            tl.to(".text-caption-wrapper-2 .text-caption-2", {
+                x: 0,
+                color: '#EC4D20',
+                duration: 0.1,
+                ease: "power3.out",
+            }, '<0.2');
+
+
+            // 2️⃣ Trigger for animation-section overlapping
+            let boxes = gsap.utils.toArray('.marketing-box-1, .marketing-box-2, .marketing-box-3');
+            // console.log(boxes);
+            // Define path coordinates dynamically
+            // Note: x:0, y:0 is now the FINAL destination
+            const pathCoordinates = [
+                { x: 0, y: 0 },
+                { x: window.innerWidth / 2, y: window.innerHeight / 6 },
+                { x: window.innerWidth + 100, y: window.innerHeight }
+            ];
+            // 1. **CRITICAL FIX: Use gsap.set() to override Elementor's initial transforms.**
+            // This instantly moves all boxes to the desired final resting position (x:0, y:0)
+            // and removes Elementor's initial transform offset.
+            gsap.set(boxes, {
+                x: 0, // Reset Elementor's horizontal transform
+                y: 0, // Reset Elementor's vertical transform
+                // We use the first coordinate of the path for the instant placement.
+                // motionPath: {
+                //     path: pathCoordinates,
+                //     alignOrigin: [0.5, 0.5],
+                //     start: 0, // Set to the final destination point (progress 0)
+                // }
+            });
+            // tl.to(".marketing-section", {
+            //     // y: '-' + defaultPositionOfMarketingSection.toString()
+            //     y: `-${document.querySelector('.scroll-section-main-grid').offsetHeight + 20}`,
+            //     duration: 2
             // }, '>');
-
-            // tl.to(".text-caption-wrapper-2", {
-            //     width: "100%",
-            //     duration: 0.5,
-            //     ease: "power2.inOut"
-            // }, '<');
-
-            // tl.to(".text-caption-wrapper-2 .text-caption-2", {
-            //     x: 0,
-            //     color: '#EC4D20',
-            //     duration: 0.1,
-            //     ease: "power3.out",
-            // }, '<0.2');
-
-            // // 2️⃣ Trigger for animation-section overlapping
-            // let boxes = gsap.utils.toArray('.marketing-box-1, .marketing-box-2, .marketing-box-3');
-            // // console.log(boxes);
-            // // Define path coordinates dynamically
-            // // Note: x:0, y:0 is now the FINAL destination
-            // const pathCoordinates = [
-            //     { x: 0, y: 0 },
-            //     { x: window.innerWidth / 2, y: window.innerHeight / 6 },
-            //     { x: window.innerWidth + 100, y: window.innerHeight }
-            // ];
-            // // 1. **CRITICAL FIX: Use gsap.set() to override Elementor's initial transforms.**
-            // // This instantly moves all boxes to the desired final resting position (x:0, y:0)
-            // // and removes Elementor's initial transform offset.
-            // gsap.set(boxes, {
-            //     x: 0, // Reset Elementor's horizontal transform
-            //     y: 0, // Reset Elementor's vertical transform
-            //     // We use the first coordinate of the path for the instant placement.
-            //     // motionPath: {
-            //     //     path: pathCoordinates,
-            //     //     alignOrigin: [0.5, 0.5],
-            //     //     start: 0, // Set to the final destination point (progress 0)
-            //     // }
-            // });
-            // // 1. **Apply the animation to ALL boxes using stagger**
-            // const slideInAnimation = gsap.from(boxes, { // <-- Use .from()
-            //     ease: "power2.out",
-            //     stagger: 0.15, // Stagger the start of each box
-            //     motionPath: {
-            //         path: pathCoordinates,
-            //         // alignOrigin will make the box center follow the path
-            //         alignOrigin: [0.5, 0.5],
-            //         start: 0, // Start at the end of the path (off-screen)
-            //         end: 1    // Animate TO the start of the path (on-screen, 0,0)
-            //     }
-            // });
+            // 1. **Apply the animation to ALL boxes using stagger**
+            const slideInAnimation = gsap.from(boxes, { // <-- Use .from()
+                ease: "power2.out",
+                stagger: 0.15, // Stagger the start of each box
+                motionPath: {
+                    path: pathCoordinates,
+                    // alignOrigin will make the box center follow the path
+                    alignOrigin: [0.5, 0.5],
+                    start: 0, // Start at the end of the path (off-screen)
+                    end: 1    // Animate TO the start of the path (on-screen, 0,0)
+                }
+            });
+            // tl.st.animation = slideInAnimation;
             // gsap.to(".marketing-section", {
             //     scrollTrigger: {
             //         trigger: ".marketing-section",
-            //         start: `${scrollSectionPinTopValue} ` + scrollSectionHeight, // after first section finished
+            //         start: `top ` + scrollSectionHeight, // after first section finished
             //         end: marketingSectionHeight.toString(), // scroll distance for overlap
             //         scrub: true,
             //         pinSpacing: false,
             //         pin: true // no pin here
             //     }
             // });
-            // // 2. **ATTACH SCROLLTRIGGER**
-            // ScrollTrigger.create({
-            //     trigger: ".marketing-section",
-            //     start: "top top",
-            //     end: "bottom top",
-            //     scrub: true,
-            //     pin: true,
-            //     animation: slideInAnimation,
-            //     markers: false,
-            // });
+            // 2. **ATTACH SCROLLTRIGGER**
+            let st= ScrollTrigger.create({
+                trigger: ".marketing-section",
+                start: "top "+document.querySelector('.marketing-section').getBoundingClientRect().top,
+                end: "+=600",
+                scrub: true,
+                pin: true,
+                animation: slideInAnimation,
+                markers: false,
+            });
+            console.log(st);
         }
 
     });
