@@ -13,47 +13,34 @@
         }
 
         function initAnimationMobile() {
+            let maxScrollY = document.documentElement.scrollHeight - window.innerHeight;            
+
+            ScrollTrigger.config({ viewport: "mobile" }); // Essential for mobile stability            
             let scrollSectionHeight = document.querySelector(".scroll-section").offsetHeight;
             // console.log(scrollSectionHeight);
             let marketingSectionHeight = document.querySelector(".marketing-section").offsetHeight;
             // console.log(marketingSectionHeight);
             // alert(scrollSectionHeight.toString() + ' ' + marketingSectionHeight.toString() + ' ' + isMobile.toString());
 
+
             let boxes = gsap.utils.toArray('.marketing-box-1, .marketing-box-2, .marketing-box-3');
             gsap.set(boxes, {
                 x: window.innerWidth,
             });
-            ScrollTrigger.config({ viewport: "mobile" }); // Essential for mobile stability            
             let defaultPositionOfMarketingSection = document.querySelector(".marketing-section").getBoundingClientRect().top;
-            console.logi
             let tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: ".scroll-section",
                     start: `${scrollSectionPinTopValue} top`,
-                    end: `+=${scrollSectionHeight + 1000}`,
+                    end: `${maxScrollY-(document.querySelector('.theory-section-mobile').offsetHeight+document.querySelector('.main-footer').offsetHeight)}`,
                     scrub: true,
                     pin: true,
-                    pinSpacing: true,
+                    pinSpacing: false,
                     anticipatePin: 1,
                     onLeave: () => {
-                        console.log('scroll trigger end for section .scroll-section');
                     },
                     onEnter: () => {
-                        // console.log('marketing section pin start', ', marketing-section position : ', document.querySelector(".marketing-section").getBoundingClientRect().top);
-                        // ScrollTrigger.create({
-                        //     trigger: '.marketing-section',
-                        //     pin: true,
-                        //     pinSpacing: false,
-                        //     start: 'top ' + defaultPositionOfMarketingSection,
-                        //     end: '+=1084',
-                        //     anticipate: 1,
-                        //     onEnter: () => {
-                        //         console.log('marketing section pin start')
-                        //     },
-                        //     onLeave: () => {
-                        //         console.log('marketing section pin end')
-                        //     }
-                        // });
+
                     },
                     onUpdate: (e) => {
                         // console.log('update', e);
@@ -84,14 +71,14 @@
                 stagger: 0.5,
             });
 
-            // let st = tl.scrollTrigger;
-            // st.end = "+=" + (tl.duration() * 500); // 500px per second of timeline
-            // st.refresh();
+            // // let st = tl.scrollTrigger;
+            // // st.end = "+=" + (tl.duration() * 500); // 500px per second of timeline
+            // // st.refresh();
 
-            // Refresh listener (Keep this)
-            ScrollTrigger.addEventListener("refresh", () => {
-                // ... recalculate heights
-            });
+            // // Refresh listener (Keep this)
+            // ScrollTrigger.addEventListener("refresh", () => {
+            //     // ... recalculate heights
+            // });
         }
 
         function initAnimationWeb() {
@@ -220,7 +207,7 @@
             ScrollTrigger.create({
                 trigger: ".marketing-section-web",
                 start: "top top",
-                end: `+=${marketingSectionHeight+20}`,
+                end: `+=${marketingSectionHeight + 20}`,
                 scrub: true,
                 pin: true,
                 animation: slideInAnimation,
@@ -230,12 +217,12 @@
                 scrollTrigger: {
                     trigger: ".remaining-section",
                     start: `0`,
-                    end: `${document.querySelector('.remaining-section').getBoundingClientRect().top-20}`, // scroll distance for overlap
+                    end: `${document.querySelector('.remaining-section').getBoundingClientRect().top - 20}`, // scroll distance for overlap
                     scrub: false,
                     pinSpacing: false,
                     pin: true // no pin here
                 }
-            });            
+            });
         }
 
     });
