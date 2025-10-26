@@ -60,7 +60,14 @@
                 end: "bottom bottom",
                 scrub: 1,
                 pin: false,
-                markers: true
+                markers: true,
+                // ✨ THE NEW SCROLL CONTROL CODE ✨
+                snap: {
+                    snapTo: 0.2,         // Snap to the halfway point of the ScrollTrigger's duration (50% scrolled)
+                    duration: { min: 0.2, max: 0.5 }, // The animation duration when snapping
+                    delay: 0.1,          // A small delay before the snap animation begins
+                    ease: "power2.inOut" // Smooth easing for the snap transition
+                }
             },
         });
     </script>
