@@ -1,0 +1,50 @@
+<script>
+    window.addEventListener("load", () => {
+        gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
+
+        let isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+        if (isMobile) {
+            initAnimationMobile();
+        } else {
+            // initAnimationWeb();
+        }
+
+        function initAnimationMobile() {
+            console.log('motion path animation start')
+
+            let img=jQuery('#motion-path-character').find('img');
+            console.log(img);
+
+            gsap.to(img, {
+                // duration: 10, // Not needed for ScrollTrigger scrub
+                motionPath: {
+                    path: '.path-line',
+                    align: '.path-line',
+                    alignOrigin: [0.5, 0.8], // Keeps the center of the image on the path
+                    autoRotate: false,
+                    start: 0,
+                    end: 0.5,
+                },
+                duration:10,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: '.path-animation-section',
+                    start: "top top",
+                    end: "bottom bottom",
+                    scrub: 1,
+                    pin: false,
+                    markers: true,
+                    // // ✨ THE NEW SCROLL CONTROL CODE ✨
+                    snap: {
+                        snapTo: 0.2,         // Snap to the halfway point of the ScrollTrigger's duration (50% scrolled)
+                        // duration: { min: 0.2, max: 0.5 }, // The animation duration when snapping
+                        // delay: 0.1,          // A small delay before the snap animation begins
+                        // ease: "power2.inOut" // Smooth easing for the snap transition
+                    }
+                },
+            });
+        }
+
+    });
+</script>
