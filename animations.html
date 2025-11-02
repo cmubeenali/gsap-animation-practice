@@ -46,45 +46,52 @@
                     pinSpacing: false,
                     anticipatePin: 1,
                     invalidateOnRefresh: true,
-                    onLeave: () => {
-                        alert(document.querySelector('.path-animation-section').getBoundingClientRect().top);
-                    },
-                    onEnter: () => {
-                        // alert(document.querySelector('.path-animation-section').getBoundingClientRect().top);
-                    },
                     onUpdate: (e) => {
                         // console.log('update', e);
+                    },
+                    onLeave: () => {
+                        // Wait for GSAP to apply the release transform, then immediately remove it
+                        // gsap.set(".scroll-section", { clearProps: "transform" });
+                        // gsap.set(".path-animation-section", { clearProps: "transform" });
+                        // alert("Scroll section unpinned; cleared transforms " + document.querySelector('.path-animation-section').getBoundingClientRect().top);
+                    },
+                    onEnterBack: () => {
+                        // If scrolling back up, clear transforms again to maintain stability
+                        // gsap.set(".scroll-section", { clearProps: "transform" });
+                        // gsap.set(".path-animation-section", { clearProps: "transform" });
                     }
                 }
             });
 
             // 1. --- PHASE 1: Caption Animations (0.0s to 1.0s) ---
             // Start Caption 1 set at 0.0s. It will run until 0.5s.
-            // tl.to(".logo", { opacity: 0, ease: "power4.out", duration: 0.2 }, 0);
-            // tl.to(".text-caption-wrapper", { x: 10, width: "100%", ease: "power2.out", duration: 0.5 }, 0);
-            // tl.to(".text-caption-wrapper .text-caption", { x: 0, color: '#EC4D20', ease: "power3.out", duration: 0.7 }, 0.2);
+            tl.to(".logo", { opacity: 0, ease: "power4.out", duration: 0.2 }, 0);
+            tl.to(".text-caption-wrapper", { x: 10, width: "100%", ease: "power2.out", duration: 0.5 }, 0);
+            tl.to(".text-caption-wrapper .text-caption", { x: 0, color: '#EC4D20', ease: "power3.out", duration: 0.7 }, 0.2);
 
-            // // Start Caption 2 set at 0.5s. It must finish by 1.0s.
-            // // NOTE: We don't use 'caption2Start' label anymore for simplicity.
-            // tl.to(".text-caption-wrapper-2", { x: 10, width: "100%", ease: "power2.out", duration: 0.5 }, '>');
-            // tl.to(".text-caption-wrapper-2 .text-caption-2", { x: 0, color: '#EC4D20', ease: "power3.out", duration: 0.7 }, '<0.2');
+            // Start Caption 2 set at 0.5s. It must finish by 1.0s.
+            // NOTE: We don't use 'caption2Start' label anymore for simplicity.
+            tl.to(".text-caption-wrapper-2", { x: 10, width: "100%", ease: "power2.out", duration: 0.5 }, '>');
+            tl.to(".text-caption-wrapper-2 .text-caption-2", { x: 0, color: '#EC4D20', ease: "power3.out", duration: 0.7 }, '<0.2');
 
 
-            // tl.to(".marketing-section", {
-            //     // y: '-' + defaultPositionOfMarketingSection.toString()
-            //     y: `-${document.querySelector('.scroll-section-main-grid').offsetHeight + 20}`,
-            //     duration: 2
-            // }, '>');
+            tl.to(".marketing-section", {
+                // y: '-' + defaultPositionOfMarketingSection.toString()
+                y: `-${document.querySelector('.scroll-section-main-grid').offsetHeight + 20}`,
+                // duration: 2
+            }, '>');
 
-            // tl.to(boxes, {
-            //     x: 0,
-            //     stagger: 0.5,
-            // }, '>');
+            tl.to(boxes, {
+                x: 0,
+                stagger: 0.5,
+            }, '>');
 
-            // tl.to(boxes, {
-            //     opacity: 0,
-            //     stagger: 0.5
-            // }, '>');
+            tl.to(boxes, {
+                opacity: 0,
+                stagger: 0.5
+            }, '>');
+
+            // document.querySelector('.path-animation-section').
 
             // tl.to(".theory-section-mobile", {
             //     y: `-${document.querySelector('.marketing-section').offsetHeight - 75}`,
@@ -100,7 +107,7 @@
             //     x: 0,
             //     y: `-${(document.querySelector('.marketing-section').offsetHeight * 2) - 130}`,
             // }, '>');
-            // let img = jQuery('#motion-path-character').find('img');
+            let img = jQuery('#motion-path-character').find('img');
             // gsap.set(img, { y: 5140 });
             // gsap.set('.path-animation-section', { y: 5140 });
             // console.log(pathAnimationStart - document.querySelector('.marketing-section').offsetHeight);
