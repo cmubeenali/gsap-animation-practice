@@ -9,7 +9,7 @@
             scrollSectionPinTopValue = `top-=${(document.querySelector(".scroll-section").getBoundingClientRect().top)}`;
             initAnimationMobile();
         } else {
-            initAnimationWeb();
+            // initAnimationWeb();
         }
 
         function initAnimationMobile() {
@@ -32,7 +32,7 @@
                 scrollTrigger: {
                     trigger: ".scroll-section",
                     start: `${scrollSectionPinTopValue} top`,
-                    end: `${maxScrollY - (document.querySelector('.theory-section-mobile').offsetHeight + document.querySelector('.main-footer').offsetHeight)}`,
+                    end: `${maxScrollY - (document.querySelector('.theory-section-mobile').offsetHeight + document.querySelector('.theory-section-mobile').offsetHeight + document.querySelector('.main-footer').offsetHeight)}`,
                     scrub: true,
                     pin: true,
                     pinSpacing: false,
@@ -69,7 +69,52 @@
             tl.to(boxes, {
                 x: 0,
                 stagger: 0.5,
-            });
+            }, '>');
+
+            tl.to(boxes, {
+                opacity: 0,
+                stagger: 0.5
+            }, '>');
+
+            tl.to(".theory-section-mobile", {
+                y: `-${document.querySelector('.marketing-section').offsetHeight - 75}`,
+                duration: 2
+            }, '>');
+
+            tl.to("#motion-path-character", {
+                y: `-${(document.querySelector('.marketing-section').offsetHeight * 2) - 130}`,
+            }, '>');
+
+            tl.to(".path-animation-section", {
+                x: 0,
+                y: `-${(document.querySelector('.marketing-section').offsetHeight * 2) - 130}`,
+            }, '>');
+            let img = jQuery('#motion-path-character').find('img');
+            let pathAnimationStart = document.querySelector('.path-animation-section').getBoundingClientRect().top + document.querySelector('.path-animation-section').offsetHeight;
+            console.log(pathAnimationStart - document.querySelector('.marketing-section').offsetHeight);
+            gsap.to(img, {
+                motionPath: {
+                    path: '.path-line',
+                    align: '.path-line',
+                    alignOrigin: [0.5, 0.8], // Keeps the center of the image on the path
+                    autoRotate: false,
+                    start: 0,
+                    end: 0.5,
+                },
+                ease: "none",
+                scrollTrigger: {
+                    trigger: '.path-animation-section',
+                    start: `${pathAnimationStart - document.querySelector('.marketing-section').offsetHeight}`,
+                    end: `${pathAnimationStart + document.querySelector('.path-animation-section').offsetHeight}`,
+                    scrub: 1,
+                    pin: false,
+                    markers: true,
+                    // // ✨ THE NEW SCROLL CONTROL CODE ✨
+                    snap: {
+                        snapTo: 0.2,
+                    }
+                },
+            })
 
             // // let st = tl.scrollTrigger;
             // // st.end = "+=" + (tl.duration() * 500); // 500px per second of timeline
@@ -79,6 +124,7 @@
             // ScrollTrigger.addEventListener("refresh", () => {
             //     // ... recalculate heights
             // });
+            // alert(document.querySelector('.path-animation-section').getBoundingClientRect().left.toString()+' '+document.querySelector('.path-animation-section').getBoundingClientRect().top.toString())
         }
 
         function initAnimationWeb() {
