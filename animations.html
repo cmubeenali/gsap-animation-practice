@@ -40,7 +40,8 @@
                 scrollTrigger: {
                     trigger: ".scroll-section",
                     start: `${scrollSectionPinTopValue} top`,
-                    end: `${maxScrollY - (document.querySelector('.theory-section-mobile').offsetHeight + document.querySelector('.theory-section-mobile').offsetHeight + document.querySelector('.main-footer').offsetHeight)}`,
+                    // end: `${maxScrollY - (document.querySelector('.theory-section-mobile').offsetHeight + pathSection.offsetHeight)}`,
+                    end: `1520`,
                     scrub: true,
                     pin: true,
                     pinSpacing: false,
@@ -50,15 +51,46 @@
                         // console.log('update', e);
                     },
                     onLeave: () => {
+                        // console.log('maxScrollY : ', maxScrollY, ' scrollHeight : ', document.documentElement.scrollHeight);
                         // Wait for GSAP to apply the release transform, then immediately remove it
-                        // gsap.set(".scroll-section", { clearProps: "transform" });
+                        gsap.set(".scroll-section", { clearProps: "transform" });
                         // gsap.set(".path-animation-section", { clearProps: "transform" });
-                        // alert("Scroll section unpinned; cleared transforms " + document.querySelector('.path-animation-section').getBoundingClientRect().top);
+                        // console.log("Scroll section unpinned; cleared transforms " + document.querySelector('.path-animation-section').getBoundingClientRect().top);
+                        // gsap.set(".path-animation-section", { x: 0, y: 0 });
+                        gsap.killTweensOf(img);
+                        
+                        gsap.to(img, {
+                            motionPath: {
+                                path: '.path-line',
+                                align: '.path-line',
+                                alignOrigin: [0.5, 0.8], // Keeps the center of the image on the path
+                                autoRotate: false,
+                                start: 0,
+                                end: 0.5,
+                            },
+                            ease: "none",
+                            scrollTrigger: {
+                                trigger: '.path-animation-section',
+                                start: `2296`,
+                                end: `${2296 + pathSection.offsetHeight}`,
+                                scrub: 1,
+                                pin: false,
+                                markers: true,
+                                onEnter: () => {
+                                    // alert(document.querySelector('.path-animation-section').getBoundingClientRect().top.toString() + ', ' + document.querySelector('.path-animation-section').offsetHeight.toString() + ', ' + window.scrollY.toString())
+                                },
+                                // // ✨ THE NEW SCROLL CONTROL CODE ✨
+                                // snap: {
+                                //     snapTo: 0.2,
+                                // }
+                            },
+                        })
                     },
                     onEnterBack: () => {
                         // If scrolling back up, clear transforms again to maintain stability
-                        // gsap.set(".scroll-section", { clearProps: "transform" });
+                        gsap.set(".scroll-section", { clearProps: "transform" });
                         // gsap.set(".path-animation-section", { clearProps: "transform" });
+                        // gsap.set(".path-animation-section", { x: 0, y: 0 });
                     }
                 }
             });
@@ -93,11 +125,18 @@
 
             // document.querySelector('.path-animation-section').
 
-            // tl.to(".theory-section-mobile", {
-            //     y: `-${document.querySelector('.marketing-section').offsetHeight - 75}`,
-            //     duration: 2
-            // }, '>');
+            tl.to(".theory-section-mobile", {
+                y: `-${document.querySelector('.marketing-section').offsetHeight - 75}`,
+                duration: 2
+            }, '>');
 
+            tl.to(".theory-section-mobile", {
+                opacity: 0,
+                duration: 2
+            }, '>1');
+
+            tl.to('.tentacle-content-1', { marginTop: `${-(parseInt(jQuery('.path-line').closest('svg').attr('height')) + 50)}` })
+            // tl.to('.path-animation-section', { height: '3500px' });
 
             // tl.to("#motion-path-character", {
             //     y: `-${(document.querySelector('.marketing-section').offsetHeight * 2) - 130}`,
@@ -111,32 +150,16 @@
             // gsap.set(img, { y: 5140 });
             // gsap.set('.path-animation-section', { y: 5140 });
             // console.log(pathAnimationStart - document.querySelector('.marketing-section').offsetHeight);
-            // gsap.to(img, {
-            //     motionPath: {
-            //         path: '.path-line',
-            //         align: '.path-line',
-            //         alignOrigin: [0.5, 0.8], // Keeps the center of the image on the path
-            //         autoRotate: false,
-            //         start: 0,
-            //         end: 0.5,
-            //     },
-            //     ease: "none",
-            //     scrollTrigger: {
-            //         trigger: '.path-animation-section',
-            //         start: `${pathAnimationStart - marketingSection.offsetHeight}`,
-            //         end: `${((pathAnimationStart + pathSection.offsetHeight) - marketingSection.offsetHeight)}`,
-            //         scrub: 1,
-            //         pin: false,
-            //         markers: true,
-            //         onEnter: () => {
-            //             alert(document.querySelector('.path-animation-section').getBoundingClientRect().top.toString() + ', ' + document.querySelector('.path-animation-section').offsetHeight.toString() + ', ' + window.scrollY.toString())
-            //         },
-            //         // // ✨ THE NEW SCROLL CONTROL CODE ✨
-            //         // snap: {
-            //         //     snapTo: 0.2,
-            //         // }
-            //     },
-            // })
+            let animationStart = `${pathAnimationStart - marketingSection.offsetHeight}`;
+            let animationEnd = `${((pathAnimationStart + pathSection.offsetHeight) - marketingSection.offsetHeight)}`;
+            let alignOriginX = 0.8;
+            if (window.innerWidth > 400) {
+                alignOriginX = 0.8;
+            } else if (window.innerWidth > 389) {
+                alignOriginX = 0.7;
+            } else if (window.innerWidth > 374) {
+                alignOriginX = 0.9;
+            }
 
             // // let st = tl.scrollTrigger;
             // // st.end = "+=" + (tl.duration() * 500); // 500px per second of timeline
