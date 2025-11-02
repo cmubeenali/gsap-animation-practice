@@ -13,6 +13,14 @@
         }
 
         function initAnimationMobile() {
+
+            // --- STEP 1: Capture all heights before ScrollTrigger modifies layout ---
+            let pathSection = document.querySelector('.path-animation-section');
+            let marketingSection = document.querySelector('.marketing-section');
+            let scrollSection = document.querySelector('.scroll-section');
+
+            let pathAnimationStart = pathSection.getBoundingClientRect().top + pathSection.offsetHeight;
+
             let maxScrollY = document.documentElement.scrollHeight - window.innerHeight;
 
             ScrollTrigger.config({ viewport: "mobile" }); // Essential for mobile stability            
@@ -37,10 +45,12 @@
                     pin: true,
                     pinSpacing: false,
                     anticipatePin: 1,
+                    invalidateOnRefresh: true,
                     onLeave: () => {
+                        alert(document.querySelector('.path-animation-section').getBoundingClientRect().top);
                     },
                     onEnter: () => {
-
+                        // alert(document.querySelector('.path-animation-section').getBoundingClientRect().top);
                     },
                     onUpdate: (e) => {
                         // console.log('update', e);
@@ -50,71 +60,76 @@
 
             // 1. --- PHASE 1: Caption Animations (0.0s to 1.0s) ---
             // Start Caption 1 set at 0.0s. It will run until 0.5s.
-            tl.to(".logo", { opacity: 0, ease: "power4.out", duration: 0.2 }, 0);
-            tl.to(".text-caption-wrapper", { x: 10, width: "100%", ease: "power2.out", duration: 0.5 }, 0);
-            tl.to(".text-caption-wrapper .text-caption", { x: 0, color: '#EC4D20', ease: "power3.out", duration: 0.7 }, 0.2);
+            // tl.to(".logo", { opacity: 0, ease: "power4.out", duration: 0.2 }, 0);
+            // tl.to(".text-caption-wrapper", { x: 10, width: "100%", ease: "power2.out", duration: 0.5 }, 0);
+            // tl.to(".text-caption-wrapper .text-caption", { x: 0, color: '#EC4D20', ease: "power3.out", duration: 0.7 }, 0.2);
 
-            // Start Caption 2 set at 0.5s. It must finish by 1.0s.
-            // NOTE: We don't use 'caption2Start' label anymore for simplicity.
-            tl.to(".text-caption-wrapper-2", { x: 10, width: "100%", ease: "power2.out", duration: 0.5 }, '>');
-            tl.to(".text-caption-wrapper-2 .text-caption-2", { x: 0, color: '#EC4D20', ease: "power3.out", duration: 0.7 }, '<0.2');
+            // // Start Caption 2 set at 0.5s. It must finish by 1.0s.
+            // // NOTE: We don't use 'caption2Start' label anymore for simplicity.
+            // tl.to(".text-caption-wrapper-2", { x: 10, width: "100%", ease: "power2.out", duration: 0.5 }, '>');
+            // tl.to(".text-caption-wrapper-2 .text-caption-2", { x: 0, color: '#EC4D20', ease: "power3.out", duration: 0.7 }, '<0.2');
 
 
-            tl.to(".marketing-section", {
-                // y: '-' + defaultPositionOfMarketingSection.toString()
-                y: `-${document.querySelector('.scroll-section-main-grid').offsetHeight + 20}`,
-                duration: 2
-            }, '>');
+            // tl.to(".marketing-section", {
+            //     // y: '-' + defaultPositionOfMarketingSection.toString()
+            //     y: `-${document.querySelector('.scroll-section-main-grid').offsetHeight + 20}`,
+            //     duration: 2
+            // }, '>');
 
-            tl.to(boxes, {
-                x: 0,
-                stagger: 0.5,
-            }, '>');
+            // tl.to(boxes, {
+            //     x: 0,
+            //     stagger: 0.5,
+            // }, '>');
 
-            tl.to(boxes, {
-                opacity: 0,
-                stagger: 0.5
-            }, '>');
+            // tl.to(boxes, {
+            //     opacity: 0,
+            //     stagger: 0.5
+            // }, '>');
 
-            tl.to(".theory-section-mobile", {
-                y: `-${document.querySelector('.marketing-section').offsetHeight - 75}`,
-                duration: 2
-            }, '>');
+            // tl.to(".theory-section-mobile", {
+            //     y: `-${document.querySelector('.marketing-section').offsetHeight - 75}`,
+            //     duration: 2
+            // }, '>');
 
-            tl.to("#motion-path-character", {
-                y: `-${(document.querySelector('.marketing-section').offsetHeight * 2) - 130}`,
-            }, '>');
 
-            tl.to(".path-animation-section", {
-                x: 0,
-                y: `-${(document.querySelector('.marketing-section').offsetHeight * 2) - 130}`,
-            }, '>');
-            let img = jQuery('#motion-path-character').find('img');
-            let pathAnimationStart = document.querySelector('.path-animation-section').getBoundingClientRect().top + document.querySelector('.path-animation-section').offsetHeight;
-            console.log(pathAnimationStart - document.querySelector('.marketing-section').offsetHeight);
-            gsap.to(img, {
-                motionPath: {
-                    path: '.path-line',
-                    align: '.path-line',
-                    alignOrigin: [0.5, 0.8], // Keeps the center of the image on the path
-                    autoRotate: false,
-                    start: 0,
-                    end: 0.5,
-                },
-                ease: "none",
-                scrollTrigger: {
-                    trigger: '.path-animation-section',
-                    start: `${pathAnimationStart - document.querySelector('.marketing-section').offsetHeight}`,
-                    end: `${pathAnimationStart + document.querySelector('.path-animation-section').offsetHeight}`,
-                    scrub: 1,
-                    pin: false,
-                    markers: true,
-                    // // ✨ THE NEW SCROLL CONTROL CODE ✨
-                    snap: {
-                        snapTo: 0.2,
-                    }
-                },
-            })
+            // tl.to("#motion-path-character", {
+            //     y: `-${(document.querySelector('.marketing-section').offsetHeight * 2) - 130}`,
+            // }, '>');
+
+            // tl.to(".path-animation-section", {
+            //     x: 0,
+            //     y: `-${(document.querySelector('.marketing-section').offsetHeight * 2) - 130}`,
+            // }, '>');
+            // let img = jQuery('#motion-path-character').find('img');
+            // gsap.set(img, { y: 5140 });
+            // gsap.set('.path-animation-section', { y: 5140 });
+            // console.log(pathAnimationStart - document.querySelector('.marketing-section').offsetHeight);
+            // gsap.to(img, {
+            //     motionPath: {
+            //         path: '.path-line',
+            //         align: '.path-line',
+            //         alignOrigin: [0.5, 0.8], // Keeps the center of the image on the path
+            //         autoRotate: false,
+            //         start: 0,
+            //         end: 0.5,
+            //     },
+            //     ease: "none",
+            //     scrollTrigger: {
+            //         trigger: '.path-animation-section',
+            //         start: `${pathAnimationStart - marketingSection.offsetHeight}`,
+            //         end: `${((pathAnimationStart + pathSection.offsetHeight) - marketingSection.offsetHeight)}`,
+            //         scrub: 1,
+            //         pin: false,
+            //         markers: true,
+            //         onEnter: () => {
+            //             alert(document.querySelector('.path-animation-section').getBoundingClientRect().top.toString() + ', ' + document.querySelector('.path-animation-section').offsetHeight.toString() + ', ' + window.scrollY.toString())
+            //         },
+            //         // // ✨ THE NEW SCROLL CONTROL CODE ✨
+            //         // snap: {
+            //         //     snapTo: 0.2,
+            //         // }
+            //     },
+            // })
 
             // // let st = tl.scrollTrigger;
             // // st.end = "+=" + (tl.duration() * 500); // 500px per second of timeline
