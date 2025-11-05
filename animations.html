@@ -1,5 +1,5 @@
 <script>
-    window.addEventListener("load", () => {
+    function startAnimation() {
         gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
         let isMobile = window.matchMedia("(max-width: 768px)").matches;
@@ -41,7 +41,8 @@
                     trigger: ".scroll-section",
                     start: `${scrollSectionPinTopValue} top`,
                     // end: `${maxScrollY - (document.querySelector('.theory-section-mobile').offsetHeight + pathSection.offsetHeight)}`,
-                    end: `1520`,
+                    endTrigger: '.no-certificate-section',
+                    end: `top top`,
                     scrub: true,
                     pin: true,
                     pinSpacing: false,
@@ -53,44 +54,28 @@
                     onLeave: () => {
                         // console.log('maxScrollY : ', maxScrollY, ' scrollHeight : ', document.documentElement.scrollHeight);
                         // Wait for GSAP to apply the release transform, then immediately remove it
-                        gsap.set(".scroll-section", { clearProps: "transform" });
+                        // gsap.set(".scroll-section", { clearProps: "transform" });
                         // gsap.set(".path-animation-section", { clearProps: "transform" });
+                        // gsap.set(jQuery('#motion-path-character').find('img'), { clearProps: "transform" });
                         // console.log("Scroll section unpinned; cleared transforms " + document.querySelector('.path-animation-section').getBoundingClientRect().top);
-                        // gsap.set(".path-animation-section", { x: 0, y: 0 });
-                        gsap.killTweensOf(img);
-                        
-                        gsap.to(img, {
-                            motionPath: {
-                                path: '.path-line',
-                                align: '.path-line',
-                                alignOrigin: [0.5, 0.8], // Keeps the center of the image on the path
-                                autoRotate: false,
-                                start: 0,
-                                end: 0.5,
-                            },
-                            ease: "none",
-                            scrollTrigger: {
-                                trigger: '.path-animation-section',
-                                start: `2296`,
-                                end: `${2296 + pathSection.offsetHeight}`,
-                                scrub: 1,
-                                pin: false,
-                                markers: true,
-                                onEnter: () => {
-                                    // alert(document.querySelector('.path-animation-section').getBoundingClientRect().top.toString() + ', ' + document.querySelector('.path-animation-section').offsetHeight.toString() + ', ' + window.scrollY.toString())
-                                },
-                                // // ✨ THE NEW SCROLL CONTROL CODE ✨
-                                // snap: {
-                                //     snapTo: 0.2,
-                                // }
-                            },
-                        })
+                        // gsap.set(".path-animation-section", { x: 0, y: 0 });                        
+                        // gsap.to('.no-certificate-section', {
+                        //     opacity: 1,
+                        //     duration: 5
+                        // })
+                        // gsap.set('.marketing-section',{
+                        //     height:
+                        // })
+                        // ScrollTrigger.refresh();
+                        gsap.set('.scroll-section', { y: `100` })
                     },
                     onEnterBack: () => {
                         // If scrolling back up, clear transforms again to maintain stability
-                        gsap.set(".scroll-section", { clearProps: "transform" });
+                        // gsap.set(".scroll-section", { clearProps: "transform" });
                         // gsap.set(".path-animation-section", { clearProps: "transform" });
                         // gsap.set(".path-animation-section", { x: 0, y: 0 });
+                        // gsap.set(jQuery('#motion-path-character').find('img'), { clearProps: "transform" });
+                        // gsap.to('.marketing-section', { height: `${marketingSectionHeight}` })
                     }
                 }
             });
@@ -121,12 +106,12 @@
             tl.to(boxes, {
                 opacity: 0,
                 stagger: 0.5
-            }, '>');
+            }, '>1');
 
             // document.querySelector('.path-animation-section').
 
             tl.to(".theory-section-mobile", {
-                y: `-${document.querySelector('.marketing-section').offsetHeight - 75}`,
+                y: `-${document.querySelector('.marketing-section').offsetHeight - 130}`,
                 duration: 2
             }, '>');
 
@@ -135,7 +120,7 @@
                 duration: 2
             }, '>1');
 
-            tl.to('.tentacle-content-1', { marginTop: `${-(parseInt(jQuery('.path-line').closest('svg').attr('height')) + 50)}` })
+            gsap.to('.tentacle-content-1', { marginTop: `${-(parseInt(jQuery('.path-line').closest('svg').attr('height')) + 50)}` })
             // tl.to('.path-animation-section', { height: '3500px' });
 
             // tl.to("#motion-path-character", {
@@ -146,31 +131,72 @@
             //     x: 0,
             //     y: `-${(document.querySelector('.marketing-section').offsetHeight * 2) - 130}`,
             // }, '>');
+            // ScrollTrigger.refresh();
+
             let img = jQuery('#motion-path-character').find('img');
-            // gsap.set(img, { y: 5140 });
-            // gsap.set('.path-animation-section', { y: 5140 });
-            // console.log(pathAnimationStart - document.querySelector('.marketing-section').offsetHeight);
+            // // gsap.set(img, { y: 5140 });
+            // // gsap.set('.path-animation-section', { y: 5140 });
+            // // console.log(pathAnimationStart - document.querySelector('.marketing-section').offsetHeight);
             let animationStart = `${pathAnimationStart - marketingSection.offsetHeight}`;
             let animationEnd = `${((pathAnimationStart + pathSection.offsetHeight) - marketingSection.offsetHeight)}`;
-            let alignOriginX = 0.8;
+            let alignOriginX = 0.9;
             if (window.innerWidth > 400) {
                 alignOriginX = 0.8;
             } else if (window.innerWidth > 389) {
-                alignOriginX = 0.7;
+                alignOriginX = 0.5;
             } else if (window.innerWidth > 374) {
-                alignOriginX = 0.9;
+                alignOriginX = 0.1;
+            } else if (window.innerWidth > 350) {
+                alignOriginX = 0.1;
             }
 
-            // // let st = tl.scrollTrigger;
-            // // st.end = "+=" + (tl.duration() * 500); // 500px per second of timeline
-            // // st.refresh();
+            // gsap.killTweensOf(img);
 
-            // // Refresh listener (Keep this)
-            // ScrollTrigger.addEventListener("refresh", () => {
-            //     // ... recalculate heights
-            // });
-            // alert(document.querySelector('.path-animation-section').getBoundingClientRect().left.toString()+' '+document.querySelector('.path-animation-section').getBoundingClientRect().top.toString())
+            const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+            gsap.to(img, {
+                motionPath: {
+                    path: '.path-line',
+                    align: '.path-line',
+                    alignOrigin: [0.5, 0.9], // Keeps the center of the image on the path
+                    autoRotate: false,
+                    start: 0,
+                    end: 0.5,
+                    offsetX: isIOS ? -180 : 0,
+                    offsetY: isIOS ? 30 : 0,
+                },
+                ease: "none",
+                scrollTrigger: {
+                    trigger: '.path-animation-section',
+                    start: `2350`,
+                    end: `${2350 + pathSection.offsetHeight}`,
+                    scrub: 1,
+                    pin: false,
+                    pinSpacing: false,
+                    markers: false,
+                    onEnter: () => {
+                        // alert(jQuery('#motion-path-character').find('img').css('transform'))
+                        // alert(document.querySelector('.path-animation-section').getBoundingClientRect().top.toString() + ', ' + document.querySelector('.path-animation-section').offsetHeight.toString() + ', ' + window.scrollY.toString())
+                    },
+                    // // ✨ THE NEW SCROLL CONTROL CODE ✨
+                    // snap: {
+                    //     snapTo: 0.2,
+                    //     duration: { min: 0.1, max: 0.3 }, // Adjust duration to be very quick
+                    //     delay: 0, // **Set delay to 0 or a very small number**
+                    //     ease: "power1.inOut" // A good ease for snapping
+                    // }
+                },
+            })
+
         }
+
+        // function handleResize() {
+        //     // alert("Window resized!");
+        //     // Your code here to change design or layout
+        //     // ScrollTrigger.refresh();
+        // }
+
+        // window.addEventListener("resize", handleResize);
 
         function initAnimationWeb() {
             let scrollSectionHeight = document.querySelector(".scroll-section-web").offsetHeight;
@@ -315,6 +341,53 @@
                 }
             });
         }
+    }
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // 1. Get the parent element to observe (document.body is a good default)
+        const targetNode = document.body;
 
-    });
+        // 2. Define the ID of the preloader element you want to watch
+        const preloaderId = 'the-preloader-element';
+
+        // 3. The function to run when the preloader is removed
+        function runOnPreloaderRemoved() {
+            // Your custom function here
+            // alert('Preloader element is no longer available! Content full load aayi.');
+
+            startAnimation();
+
+            // Stop observing once the action is taken
+            if (observer) {
+                observer.disconnect();
+            }
+        }
+
+        // 4. MutationObserver callback function
+        function handleMutation(mutationsList, observer) {
+            // Check if the preloader element exists in the DOM
+            const preloaderElement = document.getElementById(preloaderId);
+
+            // If the element is NOT found (i.e., it has been removed)
+            if (!preloaderElement) {
+                runOnPreloaderRemoved();
+            }
+        }
+
+        // 5. Create a MutationObserver instance
+        const observer = new MutationObserver(handleMutation);
+
+        // 6. Configuration options for the observer
+        // We need to watch for changes to the parent's children (childList: true)
+        // because the element will be removed from the DOM.
+        const config = { childList: true, subtree: true };
+
+        // 7. Start observing the target node for configured mutations
+        observer.observe(targetNode, config);
+
+        // Fallback/Initial Check: Run an immediate check in case the preloader 
+        // is removed *before* this script runs, or just after initial load.
+        if (!document.getElementById(preloaderId)) {
+            runOnPreloaderRemoved();
+        }
+    });    
 </script>
