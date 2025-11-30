@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="smooth-wrapper">
+        <div id="smooth-content">
+            <div
+                style="height: 100vh; background-color: red; display: flex; justify-content: center; align-items: center;">
+                <div style="width: 100%; text-align: center;">
+                    <p class="hero-caption"
+                        style="font-family: Arial, Helvetica, sans-serif; font-weight: bold; color: white; font-size: 32px;">
+                        GO DIGITAL,</p>
+                    <p
+                        style="font-family: Arial, Helvetica, sans-serif; font-weight: bold; color: white; font-size: 32px;">
+                        GET HIRED!</p>
+                </div>
+            </div>
+            <div class="scroll-anim-section"
+                style="height: 100vh; background-color: purple; display: flex; justify-content: center; align-items: center;">
+                <div class="content-area"
+                    style="width: 60%; background-color: #2c2c2c; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap:10px; border-radius: 10px; height: 500px;">
+                    <div style="background-color: #ccc; padding: 20px; text-align: center; border-radius: 10px;">
+
+                    </div>
+                </div>
+            </div>
+            <div
+                style="height: 100vh; background-color: orange; display: flex; justify-content: center; align-items: center;">
+                <div
+                    style="width: 60%; background: none; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap:10px; border-radius: 10px; height: 500px;">
+                    <div class="content-item"
+                        style="background-color: #ccc; padding: 20px; text-align: center; border-radius: 10px; transform: translate(-60px,0);">
+
+                    </div>
+                    <div class="content-item"
+                        style="background-color: #ccc; padding: 20px; text-align: center; border-radius: 10px; transform: translate(0px,-60px);">
+
+                    </div>
+                    <div class="content-item"
+                        style="background-color: #ccc; padding: 20px; text-align: center; border-radius: 10px; transform: translate(20px, 60px);">
+
+                    </div>
+                    <div class="content-item"
+                        style="background-color: #ccc; padding: 20px; text-align: center; border-radius: 10px; transform: translate(0px,60px);">
+
+                    </div>
+                    <div class="content-item"
+                        style="background-color: #ccc; padding: 20px; text-align: center; border-radius: 10px;">
+
+                    </div>
+                    <div class="content-item"
+                        style="background-color: #ccc; padding: 20px; text-align: center; border-radius: 10px; transform: translate(20px,120px);">
+
+                    </div>
+                    <div class="content-item"
+                        style="background-color: #ccc; padding: 20px; text-align: center; border-radius: 10px; transform: translate(-20px,120px);">
+
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-anim-section"
+                style="height: 100vh; background-color: blueviolet; display: flex; justify-content: center; align-items: center;">
+                <h3>Section 4</h3>
+            </div>
+        </div>
+    </div>
+    <!-- GSAP Core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <!-- GSAP ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollSmoother.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js"></script>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
+        let smoother = ScrollSmoother.create({
+            wrapper: '#smooth-wrapper',
+            content: '#smooth-content',
+            smooth: 2,
+            smoothTouch: 0.1,
+        });
+
+        let split = SplitText.create('.hero-caption', {
+            type: "chars"
+        });
+
+        gsap.from(split.chars, {
+            y: 0,
+            x: 10,
+            opacity: 1,
+            autoAlpha: 0,
+            stagger: 0.05
+        });
+
+        tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: '.scroll-anim-section',
+                start: "top bottom",
+                end: "+=300%",
+                toggleActions: "restart none none reverse",
+                scrub: true,
+                markers: true,
+            }
+        });
+
+        tl.to('.content-area', {
+            scale: 1.6
+        });
+
+        tl.to('.content-item', {
+            x: 0,
+            y: 0
+        });
+
+    </script>
+</body>
+
+</html>
