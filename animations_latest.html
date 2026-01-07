@@ -1,0 +1,274 @@
+<script>
+	function startAnimation() {
+		gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
+		// hero section animation
+		gsap.registerPlugin(SplitText);
+
+		let isMobile = window.matchMedia("(max-width: 768px)").matches;
+		if (isMobile) {
+			initAnimationMobile();
+		} else {
+			initAnimationWeb();
+		}
+
+		function initAnimationWeb() {
+			let smoother = ScrollSmoother.create({
+				wrapper: '#smooth-wrapper',
+				content: '#smooth-content',
+				smooth: 1,
+				smoothTouch: 1,
+			});
+			let splitCaption = SplitText.create('.hero-caption', {
+				type: "chars"
+			});
+
+			let splitCaptionPara = SplitText.create('.hero-caption-para', {
+				type: "chars"
+			});
+
+			gsap.from(splitCaption.chars, {
+				y: 0,
+				x: 10,
+				opacity: 1,
+				autoAlpha: 0,
+				stagger: 0.09
+			});
+			gsap.from(splitCaptionPara.chars, {
+				y: 10,
+				x: 0,
+				opacity: 1,
+				autoAlpha: 0,
+				stagger: 0.02,
+				scale: 1.4
+			});
+			gsap.fromTo('.title-bg-img', { scale: 0, x: '-250px', y: '-150px' }, { scale: 1, duration: 1, x: 0, y: 0 });
+
+			// marketing section animation
+			let splitH1Marketing = SplitText.create('.marketing-section-title', {
+				type: "chars"
+			});
+			tl = gsap.timeline({
+				scrollTrigger: {
+					trigger: '#marketing-section',
+					start: `top center`,
+					end: "+=300%",
+					//toggleActions: "restart none none reverse",
+					scrub: true,
+					markers: false,
+					once: true
+				}
+			});
+			tl.to('.marketing-box', { y: 0 }, '<0.2');
+// 			tl.to({}, { duration: 1 })
+			tl.fromTo('.theory-sec-img', { x: '-500px', opacity: 0 }, { x: 0, opacity: 1 }, '>0');
+			tl.fromTo('.practical-sec-img', { x: '880px', opacity: 0 }, { x: 0, opacity: 1 }, '<0');
+
+
+			// deepa's journey section
+			gsap.registerPlugin(MotionPathPlugin);
+
+			let img = jQuery('.motion-path-character').find('img');
+			
+			gsap.to(img, {
+				motionPath: {
+					path: '.path-line',
+					align: '.path-line',
+					alignOrigin: [0.5, 0.9], // Keeps the center of the image on the path
+					autoRotate: false,
+					start: 0,
+					end: 0.5,
+					offsetX: 0,
+					offsetY: 0,
+				},
+				ease: "none",
+				scrollTrigger: {
+					trigger: '.path-animation-section',
+					start: `3500`,
+					end: `7250`,
+					scrub: 1,
+					pin: false,
+					pinSpacing: false,
+					markers: false,
+					once: true,
+					onLeave: () => {
+						// 						jQuery(img).hide();
+						// 						jQuery('.motion-path-character-success').attr('style',jQuery(img).attr('style'))
+						// 						jQuery('.motion-path-character-success').show();
+						// 						console.log(jQuery('.motion-path-character-success'));
+						//							console.log(jQuery('.gallery-img').find('div'));
+						gsap.to(jQuery('.gallery-img').find('div'), {
+							x: 0,
+							y: 0,
+							scrollTrigger: {
+								trigger: '#gallery-section',
+								start: `top bottom`,
+								end: `+=100%`,
+								scrub: true,
+								toggleActions: "restart none none reverse",
+								markers: false,
+								once: true
+							},
+						});
+					}
+				},
+			});
+
+			gsap.fromTo('.tentacle-content-sub-section',
+				{ opacity: 0 },
+				{
+					opacity: 1,
+					stagger: 0.5,
+					scrollTrigger: {
+						start: `3500`,
+						end: `7150`,
+						scrub: true,
+						markers: false,
+						once: true
+					},
+				});
+			jQuery('.main-menu-web a.elementor-item-anchor').click(function(e){				
+				e.preventDefault();
+				let sectionId=jQuery(this).attr('href');
+				if(sectionId!=undefined){					
+					smoother.scrollTo(sectionId,true,'center center');					
+				}
+			});
+		}
+
+		function initAnimationMobile() {
+			// 				console.log(jQuery('#smooth-content-mobile'));
+			const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);			
+			let smoother = ScrollSmoother.create({
+				wrapper: '#smooth-wrapper-mobile',
+				content: '#smooth-content-mobile',
+				smooth: 1,
+				smoothTouch: 1,
+			});
+
+			let splitCaption = SplitText.create('.hero-caption-mobile', {
+				type: "chars"
+			});
+
+			let splitCaptionPara = SplitText.create('.hero-caption-para-mobile', {
+				type: "chars"
+			});
+
+			gsap.from(splitCaption.chars, {
+				y: 0,
+				x: 10,
+				opacity: 1,
+				autoAlpha: 0,
+				stagger: 0.09
+			});
+			gsap.from(splitCaptionPara.chars, {
+				y: 10,
+				x: 0,
+				opacity: 1,
+				autoAlpha: 0,
+				stagger: 0.02,
+				scale: 1.4
+			});
+
+			gsap.fromTo('.title-bg-img-mobile', { scale: 0, x: '-250px', y: '-150px' }, { scale: 1, duration: 1, x: 0, y: 0 });
+
+			// deepa's journey section
+			gsap.registerPlugin(MotionPathPlugin);
+
+			let img = jQuery('.motion-path-character-mobile').find('img');
+			gsap.to(img, {
+				motionPath: {
+					path: '.path-line-mobile',
+					align: '.path-line-mobile',
+					alignOrigin: [0.5, (isIOS==false?0.9:0.5)], // Keeps the center of the image on the path
+					autoRotate: false,
+					start: 0,
+					end: 0.5,
+					offsetX: 0,
+					offsetY: (isIOS==true?90:0),
+				},
+				ease: "none",
+				scrollTrigger: {
+					trigger: '.path-animation-section-mobile',
+					start: `4000`,
+					end: `7750`,
+					scrub: 1,
+					pin: false,
+					pinSpacing: false,
+					markers: false,
+					once: true,
+					onLeave: () => {
+						// console.log(jQuery('.gallery-img-mobile').find('div'));
+						gsap.to(jQuery('.gallery-content-mobile'), {
+							x: 0,
+							y: 0,
+							scrollTrigger: {
+								trigger: '.gallery-section-mobile',
+								start: `top bottom`,
+								end: `+=100%`,
+								scrub: true,
+								toggleActions: "restart none none reverse",
+								markers: false,
+								once: true
+							},
+						});
+					}
+				},
+			});
+
+			// 			console.log(jQuery('.tentacle-content-mobile'));
+			gsap.fromTo('.tentacle-content-mobile',
+				{ opacity: 0 },
+				{
+					opacity: 1,
+					stagger: 0.5,
+					scrollTrigger: {
+						start: `3900`,
+						end: `7750`,
+						scrub: true,
+						markers: false,
+						once: true
+					},
+				});					
+			jQuery('.trigger-mobile-menu').click(function(){				
+				setTimeout(function(){
+					jQuery('.main-menu-mobile a.elementor-item.elementor-item-anchor').click(function(e){				
+						e.preventDefault();
+						let sectionId='.'+(jQuery(this).attr('href')+'-mobile').slice(1);						
+						console.log(sectionId,smoother);
+// 						if(sectionId!=undefined){					
+// 							smoother.scrollTo(sectionId,true,'center center');
+// 						}
+					});
+				},1000);				
+			});
+		}
+	}
+	document.addEventListener('DOMContentLoaded', (event) => {		
+		const targetNode = document.body;
+		const preloaderId = 'the-preloader-element';
+		
+		function runOnPreloaderRemoved() {
+
+			startAnimation();			
+			if (observer) {
+				observer.disconnect();
+			}
+		}
+
+		function handleMutation(mutationsList, observer) {			
+			const preloaderElement = document.getElementById(preloaderId);			
+			if (!preloaderElement) {
+				runOnPreloaderRemoved();
+			}
+		}
+
+		const observer = new MutationObserver(handleMutation);
+		const config = { childList: true, subtree: true };		
+		observer.observe(targetNode, config);
+		if (!document.getElementById(preloaderId)) {
+			runOnPreloaderRemoved();
+		}		
+	});	
+	
+</script>

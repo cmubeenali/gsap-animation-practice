@@ -391,3 +391,175 @@
         }
     });    
 </script>
+
+<script>
+    setTimeout(function () {
+        gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+        let smoother = ScrollSmoother.create({
+            wrapper: '#smooth-wrapper',
+            content: '#smooth-content',
+            smooth: 2,
+            smoothTouch: 0.1,
+        });
+
+        // hero section animation
+        gsap.registerPlugin(SplitText);
+
+        let isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+        let scrollSectionPinTopValue = 'top';
+        if (isMobile) {
+            scrollSectionPinTopValue = `top-=${(document.querySelector(".scroll-section").getBoundingClientRect().top)}`;
+            // initAnimationMobile();
+        } else {
+            initAnimationWeb();
+        }
+
+        function initAnimationWeb() {
+            let splitCaption = SplitText.create('.hero-caption', {
+                type: "chars"
+            });
+
+            let splitCaptionPara = SplitText.create('.hero-caption-para', {
+                type: "chars"
+            });
+
+            gsap.from(splitCaption.chars, {
+                y: 0,
+                x: 10,
+                opacity: 1,
+                autoAlpha: 0,
+                stagger: 0.09
+            });
+            gsap.from(splitCaptionPara.chars, {
+                y: 10,
+                x: 0,
+                opacity: 1,
+                autoAlpha: 0,
+                stagger: 0.02,
+                scale: 1.4
+            });
+            gsap.fromTo('.title-bg-img', { scale: 0, x: '-250px', y: '-150px' }, { scale: 1, duration: 1, x: 0, y: 0 });
+
+            // marketing section animation
+            let splitH1Marketing = SplitText.create('.marketing-section-title', {
+                type: "chars"
+            });
+            tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: '#marketing-section',
+                    start: `top center`,
+                    end: "+=175%",
+                    //toggleActions: "restart none none reverse",
+                    scrub: true,
+                    markers: true,
+                    once: true,
+                }
+            });
+
+            // 		tl.fromTo('.marketing-content-section', { scale: 0.6 }, { scale: 1, width: jQuery('.marketing-content-section').width() + 200 });
+            // 		tl.to('.marketing-box-item', {
+            // 			x: 0
+            // 		}, '<0.2');
+            // 		tl.fromTo(splitH1Marketing.chars,
+            // 		{
+            // 			opacity:1
+            // 		},
+            // 		{
+            // 			y: 0,
+            // 			x: 0,
+            // 			opacity: 1,
+            // 			autoAlpha: 0,			
+            // 		})
+            tl.to('.marketing-box', { y: 0 }, '<0.2');
+            tl.fromTo('.theory-sec-img', { x: '-500px', opacity: 0 }, { x: 0, opacity: 1 }, '>0');
+            tl.fromTo('.practical-sec-img', { x: '880px', opacity: 0 }, { x: 0, opacity: 1 }, '<0');
+
+
+            // deepa's journey section
+            gsap.registerPlugin(MotionPathPlugin);
+
+            let img = jQuery('.motion-path-character').find('img');
+
+            // 		let motionPathCharacter = gsap.utils.toArray('.motion-path-character, .motion-path-character-success');
+            // 		console.log(motionPathCharacter);
+            gsap.to(img, {
+                motionPath: {
+                    path: '.path-line',
+                    align: '.path-line',
+                    alignOrigin: [0.5, 0.9], // Keeps the center of the image on the path
+                    autoRotate: false,
+                    start: 0,
+                    end: 0.5,
+                    offsetX: 0,
+                    offsetY: 0,
+                },
+                ease: "none",
+                scrollTrigger: {
+                    trigger: '.path-animation-section',
+                    start: `3500`,
+                    end: `7250`,
+                    scrub: 1,
+                    pin: false,
+                    pinSpacing: false,
+                    markers: true,
+                    once: true,
+                    onLeave: () => {
+                        // 						jQuery(img).hide();
+                        // 						jQuery('.motion-path-character-success').attr('style',jQuery(img).attr('style'))
+                        // 						jQuery('.motion-path-character-success').show();
+                        // 						console.log(jQuery('.motion-path-character-success'));
+                        //							console.log(jQuery('.gallery-img').find('div'));
+                        gsap.to(jQuery('.gallery-img').find('div'), {
+                            x: 0,
+                            y: 0,
+                            scrollTrigger: {
+                                trigger: '.gallery-section',
+                                start: `top bottom`,
+                                end: `+=100%`,
+                                scrub: true,
+                                toggleActions: "restart none none reverse",
+                                markers: false,
+                                once: true
+                            },
+                        });
+                    }
+                },
+            });
+
+            gsap.fromTo('.tentacle-content-sub-section',
+                { opacity: 0 },
+                {
+                    opacity: 1,
+                    stagger: 0.5,
+                    scrollTrigger: {
+                        start: `3500`,
+                        end: `6250`,
+                        scrub: true,
+                        markers: false,
+                        once: true
+                    },
+                });
+
+
+            // 		let placementSecPara = SplitText.create('.placement-sec-para', {
+            // 			type: "chars"
+            // 		});
+
+            // 		gsap.from(placementSecPara.chars, {
+            // 			y: 0,
+            // 			x: 0,
+            // 			opacity: 1,
+            // 			autoAlpha: 0,
+            // 			stagger: 0.02,
+            // 			scrollTrigger: {
+            // 				trigger: ".placement-section", // The element that triggers the animation
+            // 				start: "top center",               // When the top of the trigger hits the center of the viewport
+            // 				once: true,// Ensures the animation only runs once
+            // 				markers: false                      // Optional: shows visual markers for debugging
+            // 			}
+            // 		});
+        }
+
+    }, 1000);
+</script>
