@@ -1,0 +1,166 @@
+<script>
+	function startAnimation() {
+		gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
+		// hero section animation
+		gsap.registerPlugin(SplitText);
+
+		let isMobile = window.matchMedia("(max-width: 768px)").matches;
+		if (isMobile) {
+			initAnimationMobile();
+		} else {
+			initAnimationWeb();
+		}
+
+		function initAnimationWeb() {
+			let smoother = ScrollSmoother.create({
+				wrapper: '#smooth-wrapper',
+				content: '#smooth-content',
+				smooth: 1,
+				smoothTouch: 1,
+			});
+			gsap.fromTo('.title-bg-img', { scale: 0, x: '-250px', y: '-150px' }, { scale: 1, duration: 1, x: 0, y: 0 });
+			
+			let splitCaption = SplitText.create('.hero-caption', {
+				type: "chars"
+			});
+
+			let splitCaptionPara = SplitText.create('.hero-caption-para', {
+				type: "chars"
+			});
+			gsap.from(splitCaption.chars, {
+				y: 0,
+				x: 10,
+				opacity: 1,
+				autoAlpha: 0,
+				stagger: 0.099
+			});
+			gsap.from(splitCaptionPara.chars, {
+				y: 10,
+				x: 0,
+				opacity: 1,
+				autoAlpha: 0,
+				stagger: 0.02,
+				scale: 1.4
+			});			
+			jQuery('.main-menu-web a.elementor-item-anchor').click(function(e){				
+				e.preventDefault();				
+				let sectionId=jQuery(this).attr('href');				
+				if(sectionId == '#contact-section'){
+					sectionId='.'+jQuery(this).attr('href').slice(1);					
+					smoother.scrollTo(sectionId,true,'center center');
+				}else{
+					window.location.href='../'+sectionId+'-switch';
+				}				
+			});
+		}
+
+		function initAnimationMobile() {
+			// 				console.log(jQuery('#smooth-content-mobile'));
+			let smoother = ScrollSmoother.create({
+				wrapper: '#smooth-wrapper-mobile',
+				content: '#smooth-content-mobile',
+				smooth: 1,
+				smoothTouch: 1,
+			});
+			
+			gsap.fromTo('.title-bg-img', { scale: 0, x: '-250px', y: '-150px' }, { scale: 1, duration: 1, x: 0, y: 0 });
+			
+			let splitCaption = SplitText.create('.hero-caption-mobile', {
+				type: "chars"
+			});
+
+			let splitCaptionPara = SplitText.create('.hero-caption-para-mobile', {
+				type: "chars"
+			});
+			gsap.from(splitCaption.chars, {
+				y: 0,
+				x: 10,
+				opacity: 1,
+				autoAlpha: 0,
+				stagger: 0.099
+			});
+			gsap.from(splitCaptionPara.chars, {
+				y: 10,
+				x: 0,
+				opacity: 1,
+				autoAlpha: 0,
+				stagger: 0.02,
+				scale: 1.4
+			});
+			
+			jQuery('.trigger-mobile-menu').click(function(){
+				setTimeout(function(){
+					jQuery('.main-menu-mobile a.elementor-item.elementor-item-anchor').click(function(e){				
+						e.preventDefault();						
+						console.log(jQuery(this).attr('href'));
+						let sectionId=jQuery(this).attr('href');
+						if(sectionId=='#contact-section'){
+							sectionId='.'+(sectionId+'-mobile').slice(1);
+							jQuery('.hide-menu-mobile').find('a').trigger('click');
+							setTimeout(function(){																	
+								smoother.scrollTo(sectionId,true,'top 0px');								
+							},1000)
+						}else{							
+							jQuery('.hide-menu-mobile').find('a').trigger('click');
+							if(sectionId!=undefined){					
+								setTimeout(function(){									
+									window.location.href='../'+sectionId+'-switch';									
+								},1000)
+							}
+						}
+					});
+				},1000);
+			});
+		}
+	}
+	document.addEventListener('DOMContentLoaded', (event) => {
+		// 1. Get the parent element to observe (document.body is a good default)
+		const targetNode = document.body;
+
+		// 2. Define the ID of the preloader element you want to watch
+		const preloaderId = 'the-preloader-element';
+
+		// 3. The function to run when the preloader is removed
+		function runOnPreloaderRemoved() {
+			// Your custom function here
+			// alert('Preloader element is no longer available! Content full load aayi.');
+
+			startAnimation();
+			// 						console.log('ethi');
+
+			// Stop observing once the action is taken
+			if (observer) {
+				observer.disconnect();
+			}
+		}
+
+		// 4. MutationObserver callback function
+		function handleMutation(mutationsList, observer) {
+			// Check if the preloader element exists in the DOM
+			const preloaderElement = document.getElementById(preloaderId);
+
+			// If the element is NOT found (i.e., it has been removed)
+			if (!preloaderElement) {
+				runOnPreloaderRemoved();
+			}
+		}
+
+		// 5. Create a MutationObserver instance
+		const observer = new MutationObserver(handleMutation);
+
+		// 6. Configuration options for the observer
+		// We need to watch for changes to the parent's children (childList: true)
+		// because the element will be removed from the DOM.
+		const config = { childList: true, subtree: true };
+
+		// 7. Start observing the target node for configured mutations
+		observer.observe(targetNode, config);
+
+		// Fallback/Initial Check: Run an immediate check in case the preloader 
+		// is removed *before* this script runs, or just after initial load.
+		if (!document.getElementById(preloaderId)) {
+			runOnPreloaderRemoved();
+		}
+	});    
+</script>
